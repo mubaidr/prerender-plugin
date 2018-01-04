@@ -3,8 +3,8 @@ const Path = require('path')
 const mkdirp = require('mkdirp')
 const puppeteer = require('puppeteer')
 
-async function save (html, route) {
-  const folder = Path.join(this.options.outputDir, route)
+function save (rootPath, route, html) {
+  const folder = Path.join(rootPath, route)
   const file = Path.join(folder, 'index.html')
 
   mkdirp.sync(folder)
@@ -15,17 +15,14 @@ module.exports = {
   render: async(port, route, options, callback) => {
     const uri = `http://localhost:${port}${route}`
 
-    console.log(options)
-
     try {
       const browser = await puppeteer.launch()
       const page = await browser.newPage()
       await page.goto(uri)
-
-      save('--- something ---', route)
-
+      const content = await page.content()
+      save(options.outputDir, route, content)
       await browser.close()
-      callback()
+      callback(false)
     } catch (err) {
       callback(err)
     }
