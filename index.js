@@ -1,6 +1,4 @@
-const FS = require('fs')
 const Path = require('path')
-const mkdirp = require('mkdirp')
 const renderer = require('./util/renderer')
 const expressServer = require('./util/express-server.js')
 
@@ -23,22 +21,10 @@ SimpleHtmlPrecompiler.prototype.apply = async function() {
     this.routes.map(
       route =>
         new Promise(async(resolve, reject) => {
-          const url = `http://localhost:${address.port}${route}`
-          const folder = Path.join(this.options.outputDir, route)
-          const file = Path.join(folder, 'index.html')
+          await renderer.render(address.port, route, this.options, err => {
+            if (err) reject(err)
 
-          renderer.render(this.staticDir, url, this.options, html => {
-            try {
-              mkdirp.sync(folder)
-              FS.writeFileSync(file, html)
-
-              // debug
-              console.log('(Phantom) ', html)
-
-              resolve()
-            } catch (err) {
-              reject(err)
-            }
+            resolve()
           })
         })
     )

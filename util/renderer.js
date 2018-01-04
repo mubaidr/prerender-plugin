@@ -1,36 +1,33 @@
+const FS = require('fs')
 const Path = require('path')
-// const childProcess = require('child_process')
-const phantomjs = require('phantomjs-prebuilt')
+const mkdirp = require('mkdirp')
+const puppeteer = require('puppeteer')
+
+async function save (html, route) {
+  const folder = Path.join(this.options.outputDir, route)
+  const file = Path.join(folder, 'index.html')
+
+  mkdirp.sync(folder)
+  FS.writeFile(file, html)
+}
 
 module.exports = {
-  render: async(staticDir, url, options, callback) => {
-    const params = [url, JSON.stringify(options)]
+  render: async(port, route, options, callback) => {
+    const uri = `http://localhost:${port}${route}`
 
-    const program = await phantomjs.exec(
-      // '--debug=true',
-      Path.join(__dirname, 'page-render.js'),
-      ...params
-    )
-    program.stderr.pipe(process.stderr)
+    console.log(options)
 
-    program.stdout.on('data', buffer => {
-      callback(buffer.toString())
-    })
+    try {
+      const browser = await puppeteer.launch()
+      const page = await browser.newPage()
+      await page.goto(uri)
 
-    /*
-    const phantomArguments = [
-      Path.join(__dirname, 'page-render.js'),
-      url,
-      JSON.stringify(options)
-    ]
+      save('--- something ---', route)
 
-    if (options.phantomOptions) {
-      phantomArguments.unshift(options.phantomOptions)
+      await browser.close()
+      callback()
+    } catch (err) {
+      callback(err)
     }
-
-    return childProcess
-      .execFileSync(phantomjs.path, phantomArguments)
-      .toString()
-      */
   }
 }
