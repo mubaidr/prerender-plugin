@@ -11,8 +11,6 @@ module.exports = async root => {
   }
 
   const app = express()
-
   app.use(express.static(root))
-
   return app.listen(port)
 }

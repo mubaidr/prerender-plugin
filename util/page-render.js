@@ -7,57 +7,18 @@ const page = require('webpage').create()
 const url = system.args[1]
 const options = JSON.parse(system.args[2])
 
-page.settings.loadImages = false
-page.settings.localToRemoteUrlAccessEnabled = true
-page.settings.resourceTimeout = 5000
-
-if (options.phantomPageSettings) {
-  page.settings = defaultsDeep(options.phantomPageSettings, page.settings)
-}
-
-if (options.phantomPageViewportSize) {
-  page.viewportSize = options.phantomPageViewportSize
-}
-
-function returnResult(html) {
+function returnResult (html) {
   console.log(html.trim())
   phantom.exit()
 }
 
-returnResult('testing string...')
+returnResult(' phantom please ')
 
 /*
-page.open(url, status => {
-  console.log(status)
+page.settings.loadImages = false
+page.settings.localToRemoteUrlAccessEnabled = true
+page.settings.resourceTimeout = 15000
 
-  returnResult(status)
-})
-
-page.onError = err => {
-  if (options.ignoreJSErrors) return
-
-  console.error(`WARNING: ${url}\n${err}`)
-  phantom.exit(1)
-}
-
-page.onInitialized = () => {
-  page.injectJs(`${page.libraryPath}/../../core-js/client/core.js`)
-}
-
-page.onResourceRequested = (requestData, request) => {
-  if (/\.css$/i.test(requestData.url)) request.abort()
-}
-
-page.onError = message => {
-  if (options.ignoreJSErrors) return
-  const pathname = url.replace(/http:\/\/localhost:\d+/, '')
-  console.error(
-    `WARNING: JavaScript error while prerendering: ${pathname}\n${message}`
-  )
-  phantom.exit(1)
-}
-
-// PREVENT <iframe> LOADS & UNWANTED NAVIGATION AWAY FROM PAGE
 if (options.navigationLocked) {
   page.onLoadStarted = () => {
     page.navigationLocked = true
@@ -72,6 +33,27 @@ if (options.phantomPageViewportSize) {
   page.viewportSize = options.phantomPageViewportSize
 }
 
+page.onInitialized = () => {
+  page.injectJs(`${page.libraryPath}/../../core-js/client/core.js`)
+}
+
+page.onResourceRequested = (requestData, request) => {
+  if (/\.css$/i.test(requestData.url)) request.abort()
+}
+
+page.onError = message => {
+  if (options.ignoreJSErrors) return
+  console.error(`WARNING: JavaScript error: ${url}\n${message}`)
+  phantom.exit(1)
+}
+
+page.open(url, status => {
+  console.log(status)
+
+  returnResult(status)
+})
+
+/*
 page.open(url, status => {
   if (status !== 'success') {
     throw new Error(`FAIL to load: ${url}`)
