@@ -1,27 +1,33 @@
 const Path = require('path')
+const defaults = require('lodash.defaultsdeep')
 const renderer = require('./util/renderer')
 const expressServer = require('./util/express-server.js')
 
-function SimpleHtmlPrecompiler (staticDir, routes, options) {
-  this.staticDir = staticDir
-  this.routes = routes
-  this.options = options || {}
+const _options = {}
 
-  if (!this.options.outputDir) {
-    this.options.outputDir = Path.join(staticDir, '../', 'dist-pre-rendered')
+function HtmlPrerenderer (options) {
+  this.options = options || {}
+  defaults(this.options, _options)
+
+  if (!this.options.target) {
+    this.options.target = Path.join(
+      this.options.source,
+      '../',
+      'dist-pre-rendered'
+    )
   }
 }
 
 // eslint-disable-next-line
-SimpleHtmlPrecompiler.prototype.apply = async function() {
-  const server = await expressServer(this.staticDir)
-  const address = server.address()
+HtmlPrerenderer.prototype.apply = async function() {
+  const server = await expressServer(this.options.source)
+  this.options.address = server.address()
 
   Promise.all(
-    this.routes.map(
+    this.options.routes.map(
       route =>
         new Promise(async(resolve, reject) => {
-          await renderer.render(address.port, route, this.options, err => {
+          await renderer.render(route, this.options, err => {
             if (err) reject(err)
 
             resolve()
@@ -40,5 +46,8 @@ SimpleHtmlPrecompiler.prototype.apply = async function() {
 }
 
 // Debug code start
-new SimpleHtmlPrecompiler('../gh-pages/dist', ['/']).apply()
+new HtmlPrerenderer({
+  source: '../gh-pages/dist',
+  routes: ['/']
+}).apply()
 // Debug code end

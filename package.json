@@ -1,7 +1,8 @@
 {
   "name": "webpack-prerender-plugin",
   "version": "1.0.0",
-  "description": "A web-pack plugin to prerender static HTML in a single-page application.",
+  "description":
+    "A web-pack plugin to prerender static HTML in a single-page application.",
   "main": "index.js",
   "author": "Muhammad Ubaid Raza",
   "license": "MIT",
