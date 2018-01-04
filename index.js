@@ -22,7 +22,7 @@ SimpleHtmlPrecompiler.prototype.apply = async function() {
   Promise.all(
     this.routes.map(
       route =>
-        new Promise((resolve, reject) => {
+        new Promise(async(resolve, reject) => {
           const url = `http://localhost:${address.port}${route}`
           const folder = Path.join(this.options.outputDir, route)
           const file = Path.join(folder, 'index.html')
@@ -31,6 +31,10 @@ SimpleHtmlPrecompiler.prototype.apply = async function() {
             try {
               mkdirp.sync(folder)
               FS.writeFileSync(file, html)
+
+              // debug
+              console.log('(Phantom) ', html)
+
               resolve()
             } catch (err) {
               reject(err)
@@ -39,13 +43,13 @@ SimpleHtmlPrecompiler.prototype.apply = async function() {
         })
     )
   )
-    .then(() => {
-      server.close()
-    })
     .catch(err => {
       setTimeout(() => {
         throw err
       }, 0)
+    })
+    .then(() => {
+      server.close()
     })
 }
 
