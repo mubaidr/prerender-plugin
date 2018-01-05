@@ -2,7 +2,12 @@ const Path = require('path')
 const defaults = require('lodash.defaultsdeep')
 
 const _options = {
-  routes: ['/']
+  routes: ['/'],
+  capture: {
+    delay: 3000
+    // event: 'custom-document-event',
+    // selector: ''
+  }
 }
 
 module.exports = {

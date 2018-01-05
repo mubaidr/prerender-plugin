@@ -2,6 +2,24 @@ const FS = require('fs')
 const Path = require('path')
 const mkdirp = require('mkdirp')
 
+function captureAndSave (page, folder, file, callback) {
+  page
+    .content()
+    .then(content => {
+      mkdirp(folder, () => {
+        FS.writeFileSync(file, content)
+      })
+
+      page
+        .close()
+        .catch(callback)
+        .then(callback)
+    })
+    .catch(err => {
+      callback(err)
+    })
+}
+
 module.exports = {
   process: async(route, options, callback) => {
     const folder = Path.join(options.target, route)
@@ -25,16 +43,22 @@ module.exports = {
       })
 
       await page.goto(url)
-      const content = await page.content()
-      await page.close()
 
-      mkdirp(folder, () => {
-        FS.writeFileSync(file, content)
-      })
+      if (!options.capture) {
+        captureAndSave(page, folder, file, callback)
+      }
+
+      if (options.capture.delay) {
+        setTimeout(() => {
+          captureAndSave(page, folder, file, callback)
+        }, options.capture.delay)
+      } else if (options.capture.event) {
+        captureAndSave(page, folder, file, callback)
+      } else if (options.capture.selector) {
+        captureAndSave(page, folder, file, callback)
+      }
     } catch (err) {
-      callback(err)
+      throw err
     }
-
-    callback()
   }
 }

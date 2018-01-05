@@ -17,7 +17,7 @@ HtmlPrerenderer.prototype.apply = async function() {
     this.options.routes.map(
       route =>
         new Promise(async(resolve, reject) => {
-          await pageProcessor.process(route, this.options, err => {
+          pageProcessor.process(route, this.options, err => {
             if (err) reject(err)
 
             resolve()
@@ -27,6 +27,7 @@ HtmlPrerenderer.prototype.apply = async function() {
   )
     .catch(err => {
       setTimeout(() => {
+        console.log(err)
         throw err
       }, 0)
     })
