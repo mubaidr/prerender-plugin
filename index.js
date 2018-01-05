@@ -42,7 +42,7 @@ new HtmlPrerenderer({
   source: '../gh-pages/dist',
   routes: ['/'],
   capture: {
-    // event: ''
+    event: 'custom-document-event'
   }
 }).apply()
 // Debug code end

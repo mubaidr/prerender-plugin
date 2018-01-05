@@ -2,13 +2,16 @@ const FS = require('fs')
 const Path = require('path')
 const mkdirp = require('mkdirp')
 
-function captureAndSave (page, folder, file, postProcess, callback) {
+function captureAndSave (page, route, options, callback) {
+  const folder = Path.join(options.target, route)
+  const file = Path.join(folder, 'index.html')
+
   page
     .content()
     .then(c => {
       let content = c
-      if (postProcess) {
-        content = postProcess(content)
+      if (options.postProcess) {
+        content = options.postProcess(content)
       }
 
       mkdirp(folder, () => {
@@ -27,8 +30,6 @@ function captureAndSave (page, folder, file, postProcess, callback) {
 
 module.exports = {
   process: async(route, options, callback) => {
-    const folder = Path.join(options.target, route)
-    const file = Path.join(folder, 'index.html')
     const url = `${options.url}${route}`
 
     try {
@@ -50,18 +51,18 @@ module.exports = {
       await page.goto(url)
 
       if (!options.capture) {
-        captureAndSave(page, folder, file, options.postProcess, callback)
+        captureAndSave(page, route, options, callback)
       }
 
       if (options.capture.delay) {
         setTimeout(() => {
-          captureAndSave(page, folder, file, options.postProcess, callback)
+          captureAndSave(page, route, options, callback)
         }, options.capture.delay)
       } else if (options.capture.event) {
         // TODO: run script in page context
-        captureAndSave(page, folder, file, options.postProcess, callback)
+        captureAndSave(page, route, options, callback)
       } else if (options.capture.selector) {
-        const retries = 7
+        const retries = 10
         let tries = 0
 
         const check = setInterval(() => {
@@ -69,13 +70,7 @@ module.exports = {
             page.$(options.capture.selector).then(sel => {
               if (sel) {
                 clearInterval(check)
-                captureAndSave(
-                  page,
-                  folder,
-                  file,
-                  options.postProcess,
-                  callback
-                )
+                captureAndSave(page, route, options, callback)
               }
             })
 
