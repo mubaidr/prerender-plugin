@@ -7,8 +7,7 @@ function HtmlPrerenderer (options) {
   this.options = optionsProcessor.process(options)
 }
 
-// eslint-disable-next-line
-HtmlPrerenderer.prototype.apply = async function() {
+async function process (compilation, done) {
   this.options.server = await serverBuilder.build(this.options.source)
   this.options.browser = await browserBuilder.build()
   this.options.url = `http://localhost:${this.options.server.address().port}`
@@ -34,13 +33,18 @@ HtmlPrerenderer.prototype.apply = async function() {
     .then(() => {
       this.options.browser.close()
       this.options.server.close()
+
+      if (done) done()
     })
 }
 
-// Debug code start
-new HtmlPrerenderer({
-  source: '../gh-pages/dist',
-  target: '../gh-pages/dist-pre-rendered',
-  routes: ['/']
-}).apply()
-// Debug code end
+// eslint-disable-next-line
+HtmlPrerenderer.prototype.apply = async function(compiler) {
+  if (compiler) {
+    compiler.plugin('after-emit', process.bind(this))
+  } else {
+    process().bind(this)
+  }
+}
+
+module.exports = HtmlPrerenderer
