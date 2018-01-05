@@ -1,4 +1,3 @@
-const Path = require('path')
 const defaults = require('lodash.defaultsdeep')
 
 const _options = {
@@ -14,12 +13,12 @@ module.exports = {
     }
 
     if (!options.target) {
-      options.target = Path.join(options.source, '../', 'dist-pre-rendered')
+      options.target = options.source
     }
 
-    if (options.capture && Object.keys(options.capture).length === 0) {
+    if (!options.capture || Object.keys(options.capture).length === 0) {
       options.capture = {
-        delay: 2500
+        delay: 1000
       }
     }
 
