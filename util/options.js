@@ -5,8 +5,8 @@ const _options = {
 }
 
 module.exports = {
-  process: obj => {
-    const options = obj || {}
+  process: (obj = {}) => {
+    const options = obj
 
     if (!options.source) {
       throw new Error('Source directory not provided. ')
