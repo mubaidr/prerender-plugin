@@ -2,6 +2,21 @@ const FS = require('fs')
 const Path = require('path')
 const mkdirp = require('mkdirp')
 
+async function blockResources (page) {
+  await page.setRequestInterception(true)
+  page.on('request', req => {
+    if (
+      req.resourceType === 'stylesheet' ||
+      req.resourceType === 'font' ||
+      req.resourceType === 'image'
+    ) {
+      req.abort()
+    } else {
+      req.continue()
+    }
+  })
+}
+
 function captureAndSave (page, route, options, callback) {
   const folder = Path.join(options.target, route)
   const file = Path.join(folder, 'index.html')
@@ -28,58 +43,61 @@ function captureAndSave (page, route, options, callback) {
     })
 }
 
+function addCustomListner (page, event) {
+  return page.evaluateOnNewDocument(type => {
+    document.addEventListener(type, e => {
+      window.onCustomEvent({ type, detail: e.detail })
+    })
+  }, event)
+}
+
+function findSelector (page, selector, callback) {
+  const retries = 10
+  let tries = 0
+
+  const check = setInterval(() => {
+    if (tries < retries) {
+      page.$(selector).then(sel => {
+        if (sel) {
+          clearInterval(check)
+          callback()
+        }
+      })
+
+      tries += 1
+    } else {
+      clearInterval(check)
+      throw new Error('Cannot find the specified selector in page.')
+    }
+  }, 250)
+}
+
 module.exports = {
   process: async(route, options, callback) => {
     const url = `${options.url}${route}`
 
     try {
       const page = await options.browser.newPage()
-      await page.setRequestInterception(true)
+      await blockResources(page)
 
-      page.on('request', req => {
-        if (
-          req.resourceType === 'stylesheet' ||
-          req.resourceType === 'font' ||
-          req.resourceType === 'image'
-        ) {
-          req.abort()
-        } else {
-          req.continue()
-        }
-      })
-
-      await page.goto(url)
-
-      if (!options.capture) {
-        captureAndSave(page, route, options, callback)
-      }
-
-      if (options.capture.delay) {
-        setTimeout(() => {
+      if (options.capture.event) {
+        await page.exposeFunction(options.capture.event, () => {
           captureAndSave(page, route, options, callback)
-        }, options.capture.delay)
-      } else if (options.capture.event) {
-        // TODO: run script in page context
-        captureAndSave(page, route, options, callback)
-      } else if (options.capture.selector) {
-        const retries = 10
-        let tries = 0
+        })
+        await addCustomListner(page, options.capture.event)
+        await page.goto(url)
+      } else {
+        await page.goto(url)
 
-        const check = setInterval(() => {
-          if (tries < retries) {
-            page.$(options.capture.selector).then(sel => {
-              if (sel) {
-                clearInterval(check)
-                captureAndSave(page, route, options, callback)
-              }
-            })
-
-            tries += 1
-          } else {
-            clearInterval(check)
-            throw new Error('Cannot find the specified selector in page.')
-          }
-        }, 250)
+        if (options.capture.delay) {
+          setTimeout(() => {
+            captureAndSave(page, route, options, callback)
+          }, options.capture.delay)
+        } else if (options.capture.selector) {
+          findSelector(page, options.capture.selector, () => {
+            captureAndSave(page, route, options, callback)
+          })
+        }
       }
     } catch (err) {
       throw err
