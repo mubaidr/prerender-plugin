@@ -2,10 +2,15 @@ const FS = require('fs')
 const Path = require('path')
 const mkdirp = require('mkdirp')
 
-function captureAndSave (page, folder, file, callback) {
+function captureAndSave (page, folder, file, postProcess, callback) {
   page
     .content()
-    .then(content => {
+    .then(c => {
+      let content = c
+      if (postProcess) {
+        content = postProcess(content)
+      }
+
       mkdirp(folder, () => {
         FS.writeFileSync(file, content)
       })
@@ -45,16 +50,16 @@ module.exports = {
       await page.goto(url)
 
       if (!options.capture) {
-        captureAndSave(page, folder, file, callback)
+        captureAndSave(page, folder, file, options.postProcess, callback)
       }
 
       if (options.capture.delay) {
         setTimeout(() => {
-          captureAndSave(page, folder, file, callback)
+          captureAndSave(page, folder, file, options.postProcess, callback)
         }, options.capture.delay)
       } else if (options.capture.event) {
         // TODO: run script in page context
-        captureAndSave(page, folder, file, callback)
+        captureAndSave(page, folder, file, options.postProcess, callback)
       } else if (options.capture.selector) {
         const retries = 7
         let tries = 0
@@ -64,7 +69,13 @@ module.exports = {
             page.$(options.capture.selector).then(sel => {
               if (sel) {
                 clearInterval(check)
-                captureAndSave(page, folder, file, callback)
+                captureAndSave(
+                  page,
+                  folder,
+                  file,
+                  options.postProcess,
+                  callback
+                )
               }
             })
 
