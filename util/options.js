@@ -2,12 +2,7 @@ const Path = require('path')
 const defaults = require('lodash.defaultsdeep')
 
 const _options = {
-  routes: ['/'],
-  capture: {
-    delay: 3000
-    // event: 'custom-document-event',
-    // selector: ''
-  }
+  routes: ['/']
 }
 
 module.exports = {
@@ -20,6 +15,12 @@ module.exports = {
 
     if (!options.target) {
       options.target = Path.join(options.source, '../', 'dist-pre-rendered')
+    }
+
+    if (options.capture && Object.keys(options.capture).length === 0) {
+      options.capture = {
+        delay: 2500
+      }
     }
 
     defaults(options, _options)

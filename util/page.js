@@ -53,9 +53,27 @@ module.exports = {
           captureAndSave(page, folder, file, callback)
         }, options.capture.delay)
       } else if (options.capture.event) {
+        // TODO: run script in page context
         captureAndSave(page, folder, file, callback)
       } else if (options.capture.selector) {
-        captureAndSave(page, folder, file, callback)
+        const retries = 7
+        let tries = 0
+
+        const check = setInterval(() => {
+          if (tries < retries) {
+            page.$(options.capture.selector).then(sel => {
+              if (sel) {
+                clearInterval(check)
+                captureAndSave(page, folder, file, callback)
+              }
+            })
+
+            tries += 1
+          } else {
+            clearInterval(check)
+            throw new Error('Cannot find the specified selector in page.')
+          }
+        }, 250)
       }
     } catch (err) {
       throw err

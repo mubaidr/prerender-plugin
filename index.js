@@ -40,6 +40,9 @@ HtmlPrerenderer.prototype.apply = async function() {
 // Debug code start
 new HtmlPrerenderer({
   source: '../gh-pages/dist',
-  routes: ['/']
+  routes: ['/'],
+  capture: {
+    // event: ''
+  }
 }).apply()
 // Debug code end
