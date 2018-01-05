@@ -1,33 +1,23 @@
-const Path = require('path')
-const defaults = require('lodash.defaultsdeep')
-const renderer = require('./util/renderer')
-const expressServer = require('./util/express-server.js')
-
-const _options = {}
+const serverBuilder = require('./util/server')
+const browserBuilder = require('./util/browser')
+const pageProcessor = require('./util/page')
+const optionsProcessor = require('./util/options')
 
 function HtmlPrerenderer (options) {
-  this.options = options || {}
-  defaults(this.options, _options)
-
-  if (!this.options.target) {
-    this.options.target = Path.join(
-      this.options.source,
-      '../',
-      'dist-pre-rendered'
-    )
-  }
+  this.options = optionsProcessor.process(options)
 }
 
 // eslint-disable-next-line
 HtmlPrerenderer.prototype.apply = async function() {
-  const server = await expressServer(this.options.source)
-  this.options.address = server.address()
+  this.options.server = await serverBuilder.build(this.options.source)
+  this.options.browser = await browserBuilder.build()
+  this.options.url = `http://localhost:${this.options.server.address().port}`
 
   Promise.all(
     this.options.routes.map(
       route =>
         new Promise(async(resolve, reject) => {
-          await renderer.render(route, this.options, err => {
+          await pageProcessor.process(route, this.options, err => {
             if (err) reject(err)
 
             resolve()
@@ -41,7 +31,8 @@ HtmlPrerenderer.prototype.apply = async function() {
       }, 0)
     })
     .then(() => {
-      server.close()
+      this.options.browser.close()
+      this.options.server.close()
     })
 }
 
