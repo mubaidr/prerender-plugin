@@ -1,6 +1,6 @@
 {
-  "name": "webpack-prerender-plugin",
-  "description": "Home page for webpack-prerender-plugin",
+  "name": "prerender-plugin-example",
+  "description": "webpack example for prerender-plugin",
   "version": "1.0.0",
   "author": "Muhammad Ubaid Raza <mubaidr@gmail.com>",
   "license": "MIT",
@@ -10,14 +10,9 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "vue": "^2.5.11",
-    "vue-router": "^3.0.1"
+    "vue": "^2.5.11"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ],
+  "browserslist": ["> 1%", "last 2 versions", "not ie <= 8"],
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
@@ -39,6 +34,6 @@
     "vue-template-compiler": "^2.4.4",
     "webpack": "^3.6.0",
     "webpack-dev-server": "^2.9.1",
-    "webpack-prerender-plugin": "^1.0.0"
+    "prerender-plugin": "^1.0.0"
   }
 }

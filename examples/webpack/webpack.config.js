@@ -1,6 +1,6 @@
 const path = require('path')
 const webpack = require('webpack')
-const WebpackPrerenderPlugin = require('webpack-prerender-plugin')
+const PrerenderPlugin = require('prerender-plugin')
 
 module.exports = {
   entry: './src/main.js',
@@ -72,7 +72,7 @@ if (process.env.NODE_ENV === 'production') {
     new webpack.LoaderOptionsPlugin({
       minimize: true
     }),
-    new WebpackPrerenderPlugin({
+    new PrerenderPlugin({
       source: path.join(__dirname, '../dist')
     })
   ])
