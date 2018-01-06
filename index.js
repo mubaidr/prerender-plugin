@@ -1,3 +1,4 @@
+const fse = require('fs-extra')
 const serverBuilder = require('./util/server')
 const browserBuilder = require('./util/browser')
 const pageProcessor = require('./util/page')
@@ -11,6 +12,11 @@ async function process (compilation, done) {
   this.options.server = await serverBuilder.build(this.options.source)
   this.options.browser = await browserBuilder.build()
   this.options.url = `http://localhost:${this.options.server.address().port}`
+
+  // copy source folder
+  if (this.options.source !== this.options.target) {
+    await fse.copy(this.options.source, this.options.target)
+  }
 
   Promise.all(
     this.options.routes.map(

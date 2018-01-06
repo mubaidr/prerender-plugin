@@ -1,6 +1,6 @@
 {
   "name": "prerender-plugin",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description":
     "A Node.js/webpack plugin to prerender static HTML in a single page application.",
   "keywords": ["webpack", "prerender", "spa", "single page application"],
@@ -24,6 +24,7 @@
     "express": "^4.16.2",
     "lodash.defaultsdeep": "^4.6.0",
     "mkdirp": "^0.5.1",
+    "fs-extra": "5.0.0",
     "portfinder": "^1.0.13",
     "puppeteer": "^0.13.0"
   },
