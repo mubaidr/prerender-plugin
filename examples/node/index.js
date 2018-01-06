@@ -1,5 +1,5 @@
 const path = require('path')
-const PrerenderPlugin = require('../../')
+const PrerenderPlugin = require('prerender-plugin')
 
 new PrerenderPlugin({
   source: path.join(__dirname, 'app'),
