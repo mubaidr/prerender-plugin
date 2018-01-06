@@ -1,10 +1,18 @@
 # prerender-plugin
 
+[![NPM](https://nodei.co/npm/prerender-plugin.png?compact=true)](https://nodei.co/npm/prerender-plugin/)
+
 A Node.js/webpack plugin to prerender static HTML in a single-page application.
 
 ## What is Prerendering?
 
 Prerendering is a process to preload all elements on the page in preparation for a web crawler to see it. If you’re using a Single Page Application (SPA) for a site that’s not behind a login and SEO is an important concern then this plugin could help you easily generate pre-rendered version of your application.
+
+## Install
+
+```js
+npm install prerender-plugin
+```
 
 ## Usage
 
