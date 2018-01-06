@@ -1,4 +1,4 @@
 .editorconfig
 .eslintignore
 .eslintrc.json
-README.md
+examples/
