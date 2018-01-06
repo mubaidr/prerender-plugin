@@ -1,8 +1,8 @@
 {
-  "name": "webpack-prerender-plugin",
+  "name": "prerender-plugin",
   "version": "1.0.0",
   "description":
-    "A webpack plugin to prerender static HTML in a single page application.",
+    "A Node.js/webpack plugin to prerender static HTML in a single page application.",
   "keywords": ["webpack", "prerender", "spa", "single page application"],
   "homepage": "https://github.com/mubaidr/webpack-prerender-plugin",
   "bugs": {

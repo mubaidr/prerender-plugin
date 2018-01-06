@@ -1,4 +1,4 @@
-# webpack-prerender-plugin
+# prerender-plugin
 
 A Node.js/webpack plugin to prerender static HTML in a single-page application.
 
@@ -13,26 +13,26 @@ This package can be used either directly with Node.js or with webpack build proc
 ### Node.js
 
 ```js
-var webpackPrerenderPlugin = require('webpack-prerender-plugin')
+var PrerenderPlugin = require('prerender-plugin')
 
-new webpackPrerenderPlugin(options).apply()
+new PrerenderPlugin(options).apply()
 ```
 
 ### Webpack
 
 ```js
 // webpack.config.js or webpack.prod.conf.js
-var webpackPrerenderPlugin = require('webpack-prerender-plugin')
+var PrerenderPlugin = require('prerender-plugin')
 
 module.exports = {
   // ...
-  plugins: [new webpackPrerenderPlugin(options)]
+  plugins: [new PrerenderPlugin(options)]
 }
 ```
 
 ## Options
 
-```json
+```js
 {
   // Website source
   // *required
