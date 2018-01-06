@@ -1,5 +1,5 @@
 {
-  "name": "prerender-plugin-example",
+  "name": "webpack-prerender-plugin-example",
   "description": "webpack example for prerender-plugin",
   "version": "1.0.0",
   "author": "Muhammad Ubaid Raza <mubaidr@gmail.com>",
@@ -10,20 +10,16 @@
     "build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
   },
   "dependencies": {
-    "vue": "^2.5.11"
+    "vue": "^2.5.13"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ],
+  "browserslist": ["> 1%", "last 2 versions", "not ie <= 8"],
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.2",
-    "babel-preset-env": "^1.6.0",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-stage-3": "^6.24.1",
-    "cross-env": "^5.0.5",
-    "css-loader": "^0.28.7",
+    "cross-env": "^5.1.3",
+    "css-loader": "^0.28.8",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-friendly-formatter": "^3.0.0",
@@ -32,12 +28,13 @@
     "eslint-plugin-jsx-a11y": "^6.0.3",
     "eslint-plugin-react": "^7.5.1",
     "eslint-plugin-vue": "next",
-    "eslint": "^4.13.1",
-    "file-loader": "^1.1.4",
-    "vue-loader": "^13.0.5",
-    "vue-template-compiler": "^2.4.4",
-    "webpack": "^3.6.0",
-    "webpack-dev-server": "^2.9.1",
-    "prerender-plugin": "^1.0.0"
+    "eslint": "^4.14.0",
+    "file-loader": "^1.1.6",
+    "postcss-import": "^11.0.0",
+    "vue-loader": "^13.6.2",
+    "vue-template-compiler": "^2.5.13",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.10.0",
+    "prerender-plugin": "^1.0.1"
   }
 }

@@ -5,7 +5,7 @@ const PrerenderPlugin = require('prerender-plugin')
 module.exports = {
   entry: './src/main.js',
   output: {
-    path: path.resolve(__dirname, '../dist'),
+    path: path.resolve(__dirname, 'dist'),
     publicPath: '/dist/',
     filename: 'build.js'
   },
@@ -73,7 +73,8 @@ if (process.env.NODE_ENV === 'production') {
       minimize: true
     }),
     new PrerenderPlugin({
-      source: path.join(__dirname, 'dist')
+      source: path.join(__dirname, 'dist'),
+      target: path.join(__dirname, 'dist-pre')
     })
   ])
 }

@@ -1,3 +1,4 @@
+const mkdirp = require('mkdirp')
 const fse = require('fs-extra')
 const serverBuilder = require('./util/server')
 const browserBuilder = require('./util/browser')
@@ -15,7 +16,12 @@ async function process (compilation, done) {
 
   // copy source folder
   if (this.options.source !== this.options.target) {
-    await fse.copy(this.options.source, this.options.target)
+    try {
+      mkdirp.sync(this.options.target)
+      await fse.copy(this.options.source, this.options.target)
+    } catch (err) {
+      throw err
+    }
   }
 
   Promise.all(
@@ -49,7 +55,7 @@ HtmlPrerenderer.prototype.apply = async function(compiler) {
   if (compiler) {
     compiler.plugin('after-emit', process.bind(this))
   } else {
-    process().bind(this)
+    process.bind(this)()
   }
 }
 
