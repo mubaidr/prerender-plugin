@@ -51,7 +51,7 @@ async function captureAndSave (page, route, options, callback) {
   const folder = Path.join(options.target, route)
   const file = Path.join(folder, 'index.html')
 
-  await fixFormFields()
+  await fixFormFields(page)
 
   page
     .content()
