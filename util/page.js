@@ -121,11 +121,11 @@ module.exports = {
         })
         await addCustomListner(page, options.capture.event)
         await page.goto(url, {
-          waitUntil: ['load ', 'networkidle0']
+          waitUntil: 'networkidle0'
         })
       } else {
         await page.goto(url, {
-          waitUntil: ['load ', 'networkidle0']
+          waitUntil: 'networkidle0'
         })
 
         if (options.capture.delay) {
