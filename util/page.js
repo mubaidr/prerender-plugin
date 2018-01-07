@@ -2,6 +2,36 @@ const FS = require('fs')
 const Path = require('path')
 const mkdirp = require('mkdirp')
 
+function fixFormFields (page) {
+  return page.evaluate(() => {
+    Array.from(document.querySelectorAll('[type=radio]')).forEach(element => {
+      if (element.checked) {
+        element.setAttribute('checked', 'checked')
+      } else {
+        element.removeAttribute('checked')
+      }
+    })
+
+    Array.from(document.querySelectorAll('[type=checkbox]')).forEach(
+      element => {
+        if (element.checked) {
+          element.setAttribute('checked', 'checked')
+        } else {
+          element.removeAttribute('checked')
+        }
+      }
+    )
+
+    Array.from(document.querySelectorAll('option')).forEach(element => {
+      if (element.selected) {
+        element.setAttribute('selected', 'selected')
+      } else {
+        element.removeAttribute('selected')
+      }
+    })
+  })
+}
+
 async function blockResources (page) {
   await page.setRequestInterception(true)
   page.on('request', req => {
@@ -17,9 +47,11 @@ async function blockResources (page) {
   })
 }
 
-function captureAndSave (page, route, options, callback) {
+async function captureAndSave (page, route, options, callback) {
   const folder = Path.join(options.target, route)
   const file = Path.join(folder, 'index.html')
+
+  await fixFormFields()
 
   page
     .content()
@@ -46,7 +78,10 @@ function captureAndSave (page, route, options, callback) {
 function addCustomListner (page, event) {
   return page.evaluateOnNewDocument(type => {
     document.addEventListener(type, e => {
-      window.onCustomEvent({ type, detail: e.detail })
+      window.onCustomEvent({
+        type,
+        detail: e.detail
+      })
     })
   }, event)
 }
@@ -85,9 +120,13 @@ module.exports = {
           captureAndSave(page, route, options, callback)
         })
         await addCustomListner(page, options.capture.event)
-        await page.goto(url, { waitUntil: ['load ', 'networkidle0'] })
+        await page.goto(url, {
+          waitUntil: ['load ', 'networkidle0']
+        })
       } else {
-        await page.goto(url, { waitUntil: ['load ', 'networkidle0'] })
+        await page.goto(url, {
+          waitUntil: ['load ', 'networkidle0']
+        })
 
         if (options.capture.delay) {
           setTimeout(() => {
