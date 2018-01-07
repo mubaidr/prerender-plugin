@@ -85,9 +85,9 @@ module.exports = {
           captureAndSave(page, route, options, callback)
         })
         await addCustomListner(page, options.capture.event)
-        await page.goto(url)
+        await page.goto(url, { waitUntil: ['load ', 'networkidle0'] })
       } else {
-        await page.goto(url)
+        await page.goto(url, { waitUntil: ['load ', 'networkidle0'] })
 
         if (options.capture.delay) {
           setTimeout(() => {
