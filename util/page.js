@@ -32,6 +32,19 @@ function fixFormFields (page) {
   })
 }
 
+function fixInsertRule (page) {
+  return page.evaluate(() => {
+    Array.from(document.querySelectorAll('style')).forEach(style => {
+      if (style.innerText === '') {
+        // eslint-disable-next-line
+        style.innerText = Array.from(style.sheet.rules)
+          .map(rule => rule.cssText)
+          .join('')
+      }
+    })
+  })
+}
+
 async function blockResources (page) {
   await page.setRequestInterception(true)
   page.on('request', req => {
@@ -52,6 +65,7 @@ async function captureAndSave (page, route, options, callback) {
   const file = Path.join(folder, 'index.html')
 
   await fixFormFields(page)
+  await fixInsertRule(page)
 
   page
     .content()

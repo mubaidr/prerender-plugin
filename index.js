@@ -25,8 +25,8 @@ async function process (compilation, done) {
   }
 
   Promise.all(
-    this.options.routes.map(
-      route =>
+      this.options.routes.map(
+        route =>
         new Promise(async(resolve, reject) => {
           pageProcessor.process(route, this.options, err => {
             if (err) reject(err)
@@ -34,8 +34,8 @@ async function process (compilation, done) {
             resolve()
           })
         })
+      )
     )
-  )
     .catch(err => {
       setTimeout(() => {
         console.log(err)
