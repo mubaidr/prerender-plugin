@@ -9,7 +9,7 @@
     "build": "node index"
   },
   "dependencies": {
-    "prerender-plugin": "^1.0.1"
+    "prerender-plugin": "^1.1.0"
   },
   "devDependencies": {
     "eslint-config-airbnb": "^16.1.0",

@@ -60,19 +60,33 @@ async function blockResources (page) {
   })
 }
 
-function addPrefetchLinks (page, content) {
-  console.log(content)
+function addPrefetchLinks (page) {
   return page.evaluate(() => {
-    /*
-    Array.from(document.querySelectorAll('style')).forEach(style => {
-      if (style.innerText === '') {
-        // eslint-disable-next-line
-        style.innerText = Array.from(style.sheet.rules)
-          .map(rule => rule.cssText)
-          .join('')
-      }
+    function getHostname (url) {
+      const a = document.createElement('a')
+      a.href = url
+      return a.hostname
+    }
+
+    function addPrefetch (url) {
+      const hostname = getHostname(url)
+      const isInternal =
+        document.location.hostname === hostname || !hostname.length
+
+      const link = document.createElement('link')
+      link.href = url.replace('http://localhost:8000', '')
+      link.setAttribute('rel', isInternal ? 'prefetch' : 'dns-prefetch')
+
+      document.head.appendChild(link)
+    }
+
+    Array.from(document.querySelectorAll('a')).forEach(link => {
+      addPrefetch(link.href)
     })
-    */
+
+    Array.from(document.querySelectorAll('img')).forEach(img => {
+      addPrefetch(img.src)
+    })
   })
 }
 
@@ -82,11 +96,12 @@ async function captureAndSave (page, route, options, callback) {
 
   await fixFormFields(page)
   await fixInsertRule(page)
+  await addPrefetchLinks(page)
 
   page
     .content()
     .then(async c => {
-      let content = await addPrefetchLinks(page, c)
+      let content = c
       if (options.postProcess) {
         content = options.postProcess(content)
       }
