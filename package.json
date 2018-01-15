@@ -21,10 +21,12 @@
   "license": "MIT",
   "main": "index.js",
   "dependencies": {
+    "compression": "^1.7.1",
     "express": "^4.16.2",
     "lodash.defaultsdeep": "^4.6.0",
     "mkdirp": "^0.5.1",
     "fs-extra": "5.0.0",
+    "express-minify": "^1.0.0",
     "portfinder": "^1.0.13",
     "puppeteer": "^0.13.0"
   },

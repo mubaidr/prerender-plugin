@@ -60,6 +60,22 @@ async function blockResources (page) {
   })
 }
 
+function addPrefetchLinks (page, content) {
+  console.log(content)
+  return page.evaluate(() => {
+    /*
+    Array.from(document.querySelectorAll('style')).forEach(style => {
+      if (style.innerText === '') {
+        // eslint-disable-next-line
+        style.innerText = Array.from(style.sheet.rules)
+          .map(rule => rule.cssText)
+          .join('')
+      }
+    })
+    */
+  })
+}
+
 async function captureAndSave (page, route, options, callback) {
   const folder = Path.join(options.target, route)
   const file = Path.join(folder, 'index.html')
@@ -69,8 +85,8 @@ async function captureAndSave (page, route, options, callback) {
 
   page
     .content()
-    .then(c => {
-      let content = c
+    .then(async c => {
+      let content = await addPrefetchLinks(page, c)
       if (options.postProcess) {
         content = options.postProcess(content)
       }
