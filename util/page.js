@@ -49,7 +49,7 @@ async function blockResources (page) {
   await page.setRequestInterception(true)
   page.on('request', req => {
     if (
-      req.resourceType === 'stylesheet' ||
+      // req.resourceType === 'stylesheet' ||
       req.resourceType === 'font' ||
       req.resourceType === 'image'
     ) {
@@ -94,6 +94,10 @@ async function captureAndSave (page, route, options, callback) {
   const folder = Path.join(options.target, route)
   const file = Path.join(folder, 'index.html')
 
+  if (options.status.success) return
+  // eslint-disable-next-line
+  options.status.success = true
+
   await fixFormFields(page)
   await fixInsertRule(page)
   await addPrefetchLinks(page)
@@ -131,13 +135,13 @@ function addCustomListner (page, event) {
   }, event)
 }
 
-function findSelector (page, selector, callback) {
-  const retries = 10
+function findSelector (page, options, callback) {
+  const retries = 20
   let tries = 0
 
   const check = setInterval(() => {
     if (tries < retries) {
-      page.$(selector).then(sel => {
+      page.$(options.capture.selector).then(sel => {
         if (sel) {
           clearInterval(check)
           callback()
@@ -147,9 +151,8 @@ function findSelector (page, selector, callback) {
       tries += 1
     } else {
       clearInterval(check)
-      throw new Error('Cannot find the specified selector in page.')
     }
-  }, 250)
+  }, options.capture.delay / retries)
 }
 
 module.exports = {
@@ -165,23 +168,20 @@ module.exports = {
           captureAndSave(page, route, options, callback)
         })
         await addCustomListner(page, options.capture.event)
-        await page.goto(url, {
-          waitUntil: 'networkidle0'
-        })
-      } else {
-        await page.goto(url, {
-          waitUntil: 'networkidle0'
-        })
+      }
 
-        if (options.capture.delay) {
-          setTimeout(() => {
-            captureAndSave(page, route, options, callback)
-          }, options.capture.delay)
-        } else if (options.capture.selector) {
-          findSelector(page, options.capture.selector, () => {
-            captureAndSave(page, route, options, callback)
-          })
-        }
+      await page.goto(url, {
+        waitUntil: 'networkidle0'
+      })
+
+      setTimeout(() => {
+        captureAndSave(page, route, options, callback)
+      }, options.capture.delay)
+
+      if (options.capture.selector) {
+        findSelector(page, options, () => {
+          captureAndSave(page, route, options, callback)
+        })
       }
     } catch (err) {
       throw err
