@@ -2,10 +2,7 @@ const defaults = require('lodash.defaultsdeep')
 
 const _options = {
   routes: ['/'],
-  capture: {},
-  status: {
-    success: false
-  }
+  capture: {}
 }
 
 module.exports = {
@@ -24,7 +21,7 @@ module.exports = {
 
     if (!options.capture.delay) {
       if (options.capture.event || options.capture.selector) {
-        options.capture.delay = 5000
+        options.capture.delay = 10000
       } else {
         options.capture.delay = 1000
       }

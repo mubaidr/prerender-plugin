@@ -1,6 +1,6 @@
 {
   "name": "prerender-plugin",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "A Node.js/webpack plugin to prerender static HTML in a single page application.",
   "keywords": [
     "webpack",
@@ -33,7 +33,7 @@
     "lodash.defaultsdeep": "^4.6.0",
     "mkdirp": "^0.5.1",
     "portfinder": "^1.0.13",
-    "puppeteer": "^0.13.0"
+    "puppeteer": "^1.0.0"
   },
   "devDependencies": {
     "eslint-config-airbnb": "^16.1.0",

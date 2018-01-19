@@ -2,13 +2,13 @@
 
 [![NPM](https://nodei.co/npm/prerender-plugin.png?compact=true)](https://nodei.co/npm/prerender-plugin/)
 
-A Node.js/webpack plugin to prerender static HTML in a single-page application.
+Node.js/webpack module/plugin to prerender static HTML in a single-page application.
 
 ## What is Prerendering?
 
 Prerendering is a process to preload all elements on the page in preparation for a web crawler to see it. If you’re using a Single Page Application (SPA) for a site that’s not behind a login and SEO is an important concern then this plugin could help you easily generate pre-rendered version of your application.
 
-## Install
+## Installation
 
 ```js
 npm install prerender-plugin
@@ -22,7 +22,6 @@ This package can be used either directly with Node.js or with webpack build proc
 
 ```js
 var PrerenderPlugin = require('prerender-plugin')
-
 new PrerenderPlugin(options).apply()
 ```
 
@@ -34,40 +33,29 @@ var PrerenderPlugin = require('prerender-plugin')
 
 module.exports = {
   // ...
-  plugins: [new PrerenderPlugin(options)]
+  plugins: [
+    // ...
+    new PrerenderPlugin(options)
+  ]
 }
 ```
 
 ## Options
 
-```js
-{
-  // Website source
-  // *required
-  source: "",
-  // target folder for prendered content.
-  // default: source
-  target: "",
-  // list of routes to pre-render
-  // default: ["/"]
-  routes: [],
-  // specify capture technique
-  // default: capture: {delay: 1000}
-  capture: {
-    // delay before prerendering content
-    delay: 2500,
-    // trigger prerendering on custom document
-    // you need to raise event in your website
-    event: "custom-document-event",
-    // wait for selector before prerendering
-    selector: ""
-  },
-  // post processing function
-  postProcess: html => {
-    return html
-  }
-}
-```
+| Option           | Type             | Required | Default | Description                                                                                              |
+| ---------------- | ---------------- | -------- | ------- | -------------------------------------------------------------------------------------------------------- |
+| source           | String           | Yes      |         | Path of the web application.                                                                             |
+| target           | String           |          | source  | Path to save generated content.                                                                          |
+| routes           | Array of Strings |          | ['/']   | Routes which will be pre-rendered.                                                                       |
+| capture.delay    | Integer          |          | 1000ms  | Time to wait before page capture.                                                                        |
+| capture.event    | String           |          |         | Custom event for page capture.                                                                           |
+| capture.selector | String           |          |         | Wait until selected selector is available in the page before page capture.                               |
+| postProcess      | Function         |          |         | A function to process the generated HTML content. This function must return the final processed content. |
+
+### Notes:
+
+* If two or more capture optons are provided, page capture will occur on the earliest of the provided options.
+* If `capture.event` or `capture.selector` option is being used then `capture.delay` will act as timeout (default 10s).
 
 ## Examples
 

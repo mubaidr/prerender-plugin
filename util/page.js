@@ -2,6 +2,8 @@ const FS = require('fs')
 const Path = require('path')
 const mkdirp = require('mkdirp')
 
+let _captured = false
+
 function fixFormFields (page) {
   return page.evaluate(() => {
     Array.from(document.querySelectorAll('[type=radio]')).forEach(element => {
@@ -94,9 +96,8 @@ async function captureAndSave (page, route, options, callback) {
   const folder = Path.join(options.target, route)
   const file = Path.join(folder, 'index.html')
 
-  if (options.status.success) return
-  // eslint-disable-next-line
-  options.status.success = true
+  if (_captured) return
+  _captured = true
 
   await fixFormFields(page)
   await fixInsertRule(page)
@@ -174,15 +175,15 @@ module.exports = {
         waitUntil: 'networkidle0'
       })
 
-      setTimeout(() => {
-        captureAndSave(page, route, options, callback)
-      }, options.capture.delay)
-
       if (options.capture.selector) {
         findSelector(page, options, () => {
           captureAndSave(page, route, options, callback)
         })
       }
+
+      setTimeout(() => {
+        captureAndSave(page, route, options, callback)
+      }, options.capture.delay)
     } catch (err) {
       throw err
     }
