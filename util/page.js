@@ -50,11 +50,8 @@ function fixInsertRule (page) {
 async function blockResources (page) {
   await page.setRequestInterception(true)
   page.on('request', req => {
-    if (
-      // req.resourceType === 'stylesheet' ||
-      req.resourceType === 'font' ||
-      req.resourceType === 'image'
-    ) {
+    const type = req.resourceType()
+    if (type === 'stylesheet' || type === 'font' || type === 'image') {
       req.abort()
     } else {
       req.continue()
@@ -136,26 +133,6 @@ function addCustomListner (page, event) {
   }, event)
 }
 
-function findSelector (page, options, callback) {
-  const retries = 20
-  let tries = 0
-
-  const check = setInterval(() => {
-    if (tries < retries) {
-      page.$(options.capture.selector).then(sel => {
-        if (sel) {
-          clearInterval(check)
-          callback()
-        }
-      })
-
-      tries += 1
-    } else {
-      clearInterval(check)
-    }
-  }, options.capture.delay / retries)
-}
-
 module.exports = {
   process: async(route, options, callback) => {
     const url = `${options.url}${route}`
@@ -176,9 +153,16 @@ module.exports = {
       })
 
       if (options.capture.selector) {
-        findSelector(page, options, () => {
-          captureAndSave(page, route, options, callback)
-        })
+        page
+          .waitForSelector(options.capture.selector, {
+            timeout: options.capture.delay
+          })
+          .catch(() => {
+            console.log('Selector not found.')
+          })
+          .then(() => {
+            captureAndSave(page, route, options, callback)
+          })
       }
 
       setTimeout(() => {
