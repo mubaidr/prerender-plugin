@@ -1,6 +1,6 @@
 {
   "name": "prerender-plugin",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description":
     "A Node.js/webpack plugin to prerender static HTML in a single page application.",
   "keywords": ["webpack", "prerender", "spa", "single page application"],

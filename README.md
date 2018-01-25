@@ -42,15 +42,15 @@ module.exports = {
 
 ## Options
 
-| Option           | Type             | Required | Default | Description                                                                                              |
-| ---------------- | ---------------- | -------- | ------- | -------------------------------------------------------------------------------------------------------- |
-| source           | String           | Yes      |         | Path of the web application.                                                                             |
-| target           | String           |          | source  | Path to save generated content.                                                                          |
-| routes           | Array of Strings |          | ['/']   | Routes which will be pre-rendered.                                                                       |
-| capture.delay    | Integer          |          | 1000ms  | Time to wait before page capture.                                                                        |
-| capture.event    | String           |          |         | Custom event for page capture.                                                                           |
-| capture.selector | String           |          |         | Wait until selected selector is available in the page before page capture.                               |
-| postProcess      | Function         |          |         | A function to process the generated HTML content. This function must return the final processed content. |
+| Option           | Type                      | Required | Default | Description                                                                                                                                                            |
+| ---------------- | ------------------------- | -------- | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| source           | String                    | Yes      |         | Path of the web application.                                                                                                                                           |
+| target           | String                    |          | source  | Path to save generated content.                                                                                                                                        |
+| routes           | Array of Strings          |          | ['/']   | Routes which will be pre-rendered.                                                                                                                                     |
+| capture.delay    | Integer                   |          | 1000ms  | Time to wait before page capture.                                                                                                                                      |
+| capture.event    | String                    |          |         | Custom event for page capture.                                                                                                                                         |
+| capture.selector | String                    |          |         | Wait until selected selector is available in the page before page capture.                                                                                             |
+| postProcess      | Function (content, route) |          |         | A function to process the generated HTML content. This function must return the final processed content. `Content` & `route` are the only parameters for this function |
 
 ### Notes:
 
