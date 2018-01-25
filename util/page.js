@@ -105,7 +105,7 @@ async function captureAndSave (page, route, options, callback) {
     .then(async c => {
       let content = c
       if (options.postProcess) {
-        content = options.postProcess(content)
+        content = options.postProcess(content, route)
       }
 
       mkdirp(folder, () => {
