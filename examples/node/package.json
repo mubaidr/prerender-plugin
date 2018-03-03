@@ -9,16 +9,16 @@
     "build": "node index"
   },
   "dependencies": {
-    "prerender-plugin": "^1.2.2"
+    "prerender-plugin": "^1.3.0"
   },
   "devDependencies": {
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-friendly-formatter": "^3.0.0",
-    "eslint-loader": "^1.9.0",
-    "eslint-plugin-import": "^2.8.0",
+    "eslint-loader": "^2.0.0",
+    "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-react": "^7.5.1",
-    "eslint": "^4.16.0"
+    "eslint-plugin-react": "^7.7.0",
+    "eslint": "^4.18.2"
   }
 }

@@ -1,24 +1,23 @@
 {
   "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
     "node": true
   },
   "parserOptions": {
-    "ecmaVersion": 8,
+    "ecmaVersion": 6,
     "ecmaFeatures": {
       "jsx": true,
       "experimentalObjectRestSpread": true
     },
     "sourceType": "module"
   },
-  "extends": ["airbnb", "prettier"],
+  "extends": ["airbnb", "plugin:vue/essential", "prettier"],
   "rules": {
     "space-before-function-paren": [
       "error",
-      {
-        "anonymous": "never",
-        "named": "always",
-        "asyncArrow": "never"
-      }
+      { "anonymous": "never", "named": "always", "asyncArrow": "never" }
     ],
     "linebreak-style": "off",
     "no-extraneous-dependencies": "off",
@@ -27,6 +26,7 @@
   },
   "globals": {
     "document": true,
-    "phantom": true
+    "window": true,
+    "swal": true
   }
 }

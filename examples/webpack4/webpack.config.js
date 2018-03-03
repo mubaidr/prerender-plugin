@@ -44,28 +44,13 @@ module.exports = {
     extensions: ['*', '.js', '.vue', '.json']
   },
   devServer: {
-    historyApiFallback: true,
-    noInfo: true
+    historyApiFallback: true
   },
   devtool: '#eval-source-map'
 }
 
 if (process.env.NODE_ENV === 'production') {
   module.exports.plugins = (module.exports.plugins || []).concat([
-    new webpack.DefinePlugin({
-      'process.env': {
-        NODE_ENV: '"production"'
-      }
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      sourceMap: true,
-      compress: {
-        warnings: false
-      }
-    }),
-    new webpack.LoaderOptionsPlugin({
-      minimize: true
-    }),
     new PrerenderPlugin({
       source: path.join(__dirname, 'app'),
       target: path.join(__dirname, 'dist'),

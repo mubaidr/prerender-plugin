@@ -1,6 +1,6 @@
 {
   "name": "prerender-plugin",
-  "version": "1.2.4",
+  "version": "1.3.0",
   "description":
     "A Node.js/webpack plugin to prerender static HTML in a single page application.",
   "keywords": ["webpack", "prerender", "spa", "single page application"],
@@ -21,7 +21,7 @@
   "license": "MIT",
   "main": "index.js",
   "dependencies": {
-    "compression": "^1.7.1",
+    "compression": "^1.7.2",
     "connect-history-api-fallback": "^1.5.0",
     "express": "^4.16.2",
     "express-minify": "^1.0.0",
@@ -29,22 +29,22 @@
     "lodash.defaultsdeep": "^4.6.0",
     "mkdirp": "^0.5.1",
     "portfinder": "^1.0.13",
-    "puppeteer": "^1.0.0"
+    "puppeteer": "^1.1.1"
   },
   "devDependencies": {
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-friendly-formatter": "^3.0.0",
-    "eslint-loader": "^1.9.0",
+    "eslint-loader": "^2.0.0",
     "eslint-plugin-html": "^4.0.2",
-    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-import": "^2.9.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
-    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-react": "^7.5.1",
+    "eslint-plugin-react": "^7.7.0",
     "eslint-plugin-standard": "^3.0.1",
     "eslint-plugin-vue": "next",
-    "eslint": "^4.16.0"
+    "eslint": "^4.18.2"
   },
   "engines": {
     "node": ">=7.6.0"
