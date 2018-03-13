@@ -1,5 +1,7 @@
 # prerender-plugin
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/mubaidr/prerender-plugin.svg)](https://greenkeeper.io/)
+
 [![NPM](https://nodei.co/npm/prerender-plugin.png?compact=true)](https://nodei.co/npm/prerender-plugin/)
 
 Node.js/webpack module/plugin to prerender static HTML in a single-page application.
