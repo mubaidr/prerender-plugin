@@ -10,7 +10,7 @@
     "build": "webpack --mode production --progress --hide-modules"
   },
   "dependencies": {
-    "vue": "^2.5.13"
+    "vue": "^2.5.17"
   },
   "browserslist": ["> 1%", "last 2 versions", "not ie <= 8"],
   "devDependencies": {
