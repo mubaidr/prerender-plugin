@@ -1,9 +1,13 @@
 {
   "name": "prerender-plugin",
   "version": "1.3.0",
-  "description":
-    "A Node.js/webpack plugin to prerender static HTML in a single page application.",
-  "keywords": ["webpack", "prerender", "spa", "single page application"],
+  "description": "A Node.js/webpack plugin to prerender static HTML in a single page application.",
+  "keywords": [
+    "webpack",
+    "prerender",
+    "spa",
+    "single page application"
+  ],
   "homepage": "https://github.com/mubaidr/webpack-prerender-plugin",
   "bugs": {
     "url": "https://github.com/mubaidr/webpack-prerender-plugin/issues",
@@ -29,7 +33,8 @@
     "lodash.defaultsdeep": "^4.6.0",
     "mkdirp": "^0.5.1",
     "portfinder": "^1.0.13",
-    "puppeteer": "^1.1.1"
+    "puppeteer": "^1.1.1",
+    "snyk": "^1.230.5"
   },
   "devDependencies": {
     "eslint-config-airbnb": "^17.0.0",
@@ -48,5 +53,10 @@
   },
   "engines": {
     "node": ">=7.6.0"
-  }
+  },
+  "scripts": {
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
+  },
+  "snyk": true
 }
