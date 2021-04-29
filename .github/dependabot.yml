@@ -1,0 +1,27 @@
+version: 2
+updates:
+- package-ecosystem: npm
+  directory: "/"
+  schedule:
+    interval: monthly
+    time: "22:00"
+  open-pull-requests-limit: 99
+  ignore:
+  - dependency-name: eslint-plugin-react
+    versions:
+    - 7.22.0
+  - dependency-name: puppeteer
+    versions:
+    - 5.5.0
+  - dependency-name: eslint-plugin-html
+    versions:
+    - 6.1.1
+  - dependency-name: lodash
+    versions:
+    - 4.17.20
+  - dependency-name: fs-extra
+    versions:
+    - 9.0.1
+  - dependency-name: eslint-plugin-promise
+    versions:
+    - 4.2.1
